@@ -1,32 +1,32 @@
-import styled from "styled-components";
-import log from "eslint-plugin-react/lib/util/log.js";
-
-const H1 = styled.h1`
-  font-size: 30px;
-  font-weight: 600;
-  background-color: yellow;
-`;
-
-const Button = styled.button`
-  font-size: 1.4rem;
-  padding: 1.2rem 1.6rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 7px;
-  background-color: purple;
-  color: white;
-  cursor: pointer;
-
-  margin: 20px;
-`;
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard.jsx";
+import Bookings from "./pages/Bookings.jsx";
+import Motorbikes from "./pages/Motorbikes.jsx";
+import Users from "./pages/Users.jsx";
+import Settings from "./pages/Settings.jsx";
+import Account from "./pages/Account.jsx";
+import Login from "./pages/Login.jsx";
+import PageNotFound from "./pages/PageNotFound.jsx";
+import GlobalStyles from "./styles/GlobalStyles.js";
 
 function App() {
   return (
-    <div>
-      <H1>Rent Adventure App</H1>
-      <Button onClick={() => console.log("Check in")}>Check in</Button>
-      <Button onClick={() => console.log("Check out")}>Check out</Button>
-    </div>
+    <>
+      <GlobalStyles />
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Navigate replace to={"dashboard"} />} />
+          <Route path={"dashboard"} element={<Dashboard />} />
+          <Route path={"bookings"} element={<Bookings />} />
+          <Route path={"motorbikes"} element={<Motorbikes />} />
+          <Route path={"users"} element={<Users />} />
+          <Route path={"settings"} element={<Settings />} />
+          <Route path={"account"} element={<Account />} />
+          <Route path={"login"} element={<Login />} />
+          <Route path={"*"} element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
