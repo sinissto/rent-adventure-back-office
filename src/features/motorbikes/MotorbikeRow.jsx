@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "../../ui/Button.jsx";
+import { formatCurrency } from "../../utils/helpers.js";
 
 const TableRow = styled.div`
   display: grid;
@@ -49,7 +50,7 @@ function MotorbikeRow({ bike }) {
       <Img src={image} />
       <BikeBrand>{brand}</BikeBrand>
       <div>{model}</div>
-      <Price>{price} / day</Price>
+      <Price>{formatCurrency(price)}</Price>
       <Year>{year}</Year>
       <Button variation={"danger"} size={"small"}>
         Delete
