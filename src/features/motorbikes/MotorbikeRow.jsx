@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { formatCurrency } from "../../utils/helpers.js";
+import toast from "react-hot-toast";
 import styled from "styled-components";
+
+import { formatCurrency } from "../../utils/helpers.js";
 
 import Button from "../../ui/Button.jsx";
 import { deleteMotorbike } from "../../services/apiMotorbikes.js";
@@ -53,11 +55,11 @@ function MotorbikeRow({ bike }) {
   const { isPending: isDeleting, mutate } = useMutation({
     mutationFn: deleteMotorbike,
     onSuccess: () => {
-      alert("Motorbike successfully deleted!");
+      toast.success("Motorbike successfully deleted!");
       queryClient.invalidateQueries({ queryKey: ["motorbikes"] });
     },
     onError: (err) => {
-      alert(err.message);
+      toast.error(err.message);
     },
   });
 
