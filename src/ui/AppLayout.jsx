@@ -1,6 +1,4 @@
-import Heading from "./Heading.jsx";
-import Row from "./Row.jsx";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import Sidebar from "./Sidebar.jsx";
 import Header from "./Header.jsx";
 import styled from "styled-components";
