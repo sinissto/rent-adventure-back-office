@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
 import Input from "../../ui/Input";
@@ -9,46 +8,12 @@ import Textarea from "../../ui/Textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createMotorbike } from "../../services/apiMotorbikes.js";
 import toast from "react-hot-toast";
-
-const FormRow = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
-  gap: 2.4rem;
-
-  padding: 1.2rem 0;
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &:last-child {
-    padding-bottom: 0;
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-
-  &:has(button) {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1.2rem;
-  }
-`;
-
-const Label = styled.label`
-  font-weight: 500;
-`;
-
-const Error = styled.span`
-  font-size: 1.4rem;
-  color: var(--color-red-700);
-`;
+import FormRow from "../../ui/FormRow.jsx";
 
 function CreateMotorbikeForm() {
   const queryClient = useQueryClient();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState } = useForm();
+  const { errors } = formState;
 
   const { mutate, isLoading: isCreating } = useMutation({
     mutationFn: createMotorbike,
@@ -66,107 +31,138 @@ function CreateMotorbikeForm() {
     mutate(data);
   }
 
+  function onError(errors) {
+    // console.log(errors);
+  }
+
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow>
-        <Label htmlFor="brand">Motorbike brand</Label>
+    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <FormRow label={"Motorbike brand"} error={errors?.brand?.message}>
         <Input
+          disabled={isCreating}
           type="text"
           id="brand"
           placeholder={"Brand"}
-          {...register("brand")}
+          {...register("brand", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="model">Motorbike model</Label>
+      <FormRow label={"Motorbike model"} error={errors?.model?.message}>
         <Input
+          disabled={isCreating}
           type="text"
           id="model"
           placeholder={"Model"}
-          {...register("model")}
+          {...register("model", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="price">Price</Label>
+      <FormRow label={"Price"} error={errors?.price?.message}>
         <Input
+          disabled={isCreating}
           type="number"
           id="price"
           placeholder={"Price"}
-          {...register("price")}
+          {...register("price", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="description">Description for website</Label>
+      <FormRow
+        label={"Description for website"}
+        error={errors?.description?.message}
+      >
         <Textarea
+          disabled={isCreating}
           type="text"
           id="description"
           defaultValue=""
           placeholder={"Description"}
-          {...register("description")}
+          {...register("description", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="image">Motorbike photo</Label>
+      <FormRow label={"Motorbike photo"} error={errors?.image?.message}>
         <FileInput id="image" accept="image/*" {...register("image")} />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="hp">HP</Label>
-        <Input type="number" id="hp" placeholder={"HP"} {...register("hp")} />
+      <FormRow label={"HP"} error={errors?.hp?.message}>
+        <Input
+          disabled={isCreating}
+          type="number"
+          id="hp"
+          placeholder={"HP"}
+          {...register("hp", {
+            required: "This field is required",
+          })}
+        />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="capacity">Capacity</Label>
+      <FormRow label={"Capacity"} error={errors?.capacity?.message}>
         <Input
+          disabled={isCreating}
           type="number"
           id="capacity"
           placeholder={"Capacity"}
-          {...register("capacity")}
+          {...register("capacity", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="weight">Weight</Label>
+      <FormRow label={"Weight"} error={errors?.weight?.message}>
         <Input
+          disabled={isCreating}
           type="number"
           id="weight"
           placeholder={"Weight"}
-          {...register("weight")}
+          {...register("weight", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="seatHeight">Seat height</Label>
+      <FormRow label={"Seat height"} error={errors?.seatHeight?.message}>
         <Input
+          disabled={isCreating}
           type="text"
           id="seatHeight"
           placeholder={"Seat height"}
-          {...register("seatHeight")}
+          {...register("seatHeight", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="equipment">Equipment</Label>
+      <FormRow label={"Equipment"} error={errors?.equipment?.message}>
         <Textarea
+          disabled={isCreating}
           type="text"
           id="equipment"
           defaultValue=""
           placeholder={"Equipment, separated with commas"}
-          {...register("equipment")}
+          {...register("equipment", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
-      <FormRow>
-        <Label htmlFor="year">Year</Label>
+      <FormRow label={"Year"} error={errors?.year?.message}>
         <Input
+          disabled={isCreating}
           type="number"
           id="year"
           placeholder={"Year"}
-          {...register("year")}
+          {...register("year", {
+            required: "This field is required",
+          })}
         />
       </FormRow>
 
