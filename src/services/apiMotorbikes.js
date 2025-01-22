@@ -11,6 +11,20 @@ export async function getMotorbikes() {
   return data;
 }
 
+export async function createMotorbike(newBike) {
+  const { data, error } = await supabase
+    .from("motorbikes")
+    .insert([newBike])
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Motorbike could not be created!");
+  }
+
+  return data;
+}
+
 export async function deleteMotorbike(id) {
   const { error } = await supabase.from("motorbikes").delete().eq("id", id);
 
