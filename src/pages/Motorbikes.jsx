@@ -7,7 +7,7 @@ function Motorbikes() {
     <>
       <Row type={"horizontal"}>
         <Heading as="h1">All motorbikes</Heading>
-        <p>TEST</p>
+        <p>Filter / Sort</p>
       </Row>
       <Row>
         <MotorbikesTable />
