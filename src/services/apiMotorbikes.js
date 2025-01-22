@@ -10,3 +10,12 @@ export async function getMotorbikes() {
 
   return data;
 }
+
+export async function deleteMotorbike(id) {
+  const { error } = await supabase.from("motorbikes").delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Motorbike could not be deleted!");
+  }
+}

@@ -1,6 +1,9 @@
-import styled from "styled-components";
-import Button from "../../ui/Button.jsx";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { formatCurrency } from "../../utils/helpers.js";
+import styled from "styled-components";
+
+import Button from "../../ui/Button.jsx";
+import { deleteMotorbike } from "../../services/apiMotorbikes.js";
 
 const TableRow = styled.div`
   display: grid;
@@ -43,7 +46,20 @@ const Year = styled.div`
 `;
 
 function MotorbikeRow({ bike }) {
-  const { brand, model, image, price, year } = bike;
+  const queryClient = useQueryClient();
+
+  const { id: bikeId, brand, model, image, price, year } = bike;
+
+  const { isPending: isDeleting, mutate } = useMutation({
+    mutationFn: deleteMotorbike,
+    onSuccess: () => {
+      alert("Motorbike successfully deleted!");
+      queryClient.invalidateQueries({ queryKey: ["motorbikes"] });
+    },
+    onError: (err) => {
+      alert(err.message);
+    },
+  });
 
   return (
     <TableRow role={"row"}>
@@ -52,7 +68,12 @@ function MotorbikeRow({ bike }) {
       <div>{model}</div>
       <Price>{formatCurrency(price)}</Price>
       <Year>{year}</Year>
-      <Button variation={"danger"} size={"small"}>
+      <Button
+        variation={"danger"}
+        size={"small"}
+        onClick={() => mutate(bikeId)}
+        disabled={isDeleting}
+      >
         Delete
       </Button>
     </TableRow>
