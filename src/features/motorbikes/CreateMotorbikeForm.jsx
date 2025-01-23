@@ -1,22 +1,28 @@
-import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createMotorbike } from "../../services/apiMotorbikes.js";
-import toast from "react-hot-toast";
 import FormRow from "../../ui/FormRow.jsx";
+import { createOrEditMotorbike } from "../../services/apiMotorbikes.js";
 
-function CreateMotorbikeForm() {
+import { useForm } from "react-hook-form";
+
+function CreateMotorbikeForm({ bikeToEdit = {} }) {
+  const { id: editId, ...editValues } = bikeToEdit;
+  const isEditingSession = Boolean(editId);
+
   const queryClient = useQueryClient();
-  const { register, handleSubmit, reset, formState } = useForm();
+  const { register, handleSubmit, reset, formState } = useForm({
+    defaultValues: isEditingSession ? editValues : {},
+  });
   const { errors } = formState;
 
-  const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: createMotorbike,
+  const { mutate: createBike, isLoading: isCreating } = useMutation({
+    mutationFn: createOrEditMotorbike,
     onSuccess: () => {
       toast.success("New motorbike successfully created!");
       queryClient.invalidateQueries(["motorbikes"]);
@@ -27,19 +33,33 @@ function CreateMotorbikeForm() {
     },
   });
 
-  function onSubmit(data) {
-    mutate({ ...data, image: data.image[0] });
-  }
+  const { mutate: editBike, isLoading: isEditing } = useMutation({
+    mutationFn: ({ newBikeData, id }) => createOrEditMotorbike(newBikeData, id),
+    onSuccess: () => {
+      toast.success("Motorbike successfully updated!");
+      queryClient.invalidateQueries(["motorbikes"]);
+      reset();
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
 
-  function onError(errors) {
-    // console.log(errors);
+  const isWorking = isCreating || isEditing;
+
+  function onSubmit(data) {
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+
+    if (isEditingSession)
+      editBike({ newBikeData: { ...data, image }, id: editId });
+    else createBike({ ...data, image: data.image[0] });
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow label={"Motorbike brand"} error={errors?.brand?.message}>
         <Input
-          disabled={isCreating}
+          disabled={isWorking}
           type="text"
           id="brand"
           placeholder={"Brand"}
@@ -51,7 +71,7 @@ function CreateMotorbikeForm() {
 
       <FormRow label={"Motorbike model"} error={errors?.model?.message}>
         <Input
-          disabled={isCreating}
+          disabled={isWorking}
           type="text"
           id="model"
           placeholder={"Model"}
@@ -63,7 +83,7 @@ function CreateMotorbikeForm() {
 
       <FormRow label={"Price"} error={errors?.price?.message}>
         <Input
-          disabled={isCreating}
+          disabled={isWorking}
           type="number"
           id="price"
           placeholder={"Price"}
@@ -78,7 +98,7 @@ function CreateMotorbikeForm() {
         error={errors?.description?.message}
       >
         <Textarea
-          disabled={isCreating}
+          disabled={isWorking}
           type="text"
           id="description"
           defaultValue=""
@@ -90,12 +110,18 @@ function CreateMotorbikeForm() {
       </FormRow>
 
       <FormRow label={"Motorbike photo"} error={errors?.image?.message}>
-        <FileInput id="image" accept="image/*" {...register("image")} />
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register("image", {
+            required: isEditingSession ? false : "This field is required",
+          })}
+        />
       </FormRow>
 
       <FormRow label={"HP"} error={errors?.hp?.message}>
         <Input
-          disabled={isCreating}
+          disabled={isWorking}
           type="number"
           id="hp"
           placeholder={"HP"}
@@ -107,7 +133,7 @@ function CreateMotorbikeForm() {
 
       <FormRow label={"Capacity"} error={errors?.capacity?.message}>
         <Input
-          disabled={isCreating}
+          disabled={isWorking}
           type="number"
           id="capacity"
           placeholder={"Capacity"}
@@ -119,7 +145,7 @@ function CreateMotorbikeForm() {
 
       <FormRow label={"Weight"} error={errors?.weight?.message}>
         <Input
-          disabled={isCreating}
+          disabled={isWorking}
           type="number"
           id="weight"
           placeholder={"Weight"}
@@ -131,7 +157,7 @@ function CreateMotorbikeForm() {
 
       <FormRow label={"Seat height"} error={errors?.seatHeight?.message}>
         <Input
-          disabled={isCreating}
+          disabled={isWorking}
           type="text"
           id="seatHeight"
           placeholder={"Seat height"}
@@ -143,7 +169,7 @@ function CreateMotorbikeForm() {
 
       <FormRow label={"Equipment"} error={errors?.equipment?.message}>
         <Textarea
-          disabled={isCreating}
+          disabled={isWorking}
           type="text"
           id="equipment"
           defaultValue=""
@@ -156,7 +182,7 @@ function CreateMotorbikeForm() {
 
       <FormRow label={"Year"} error={errors?.year?.message}>
         <Input
-          disabled={isCreating}
+          disabled={isWorking}
           type="number"
           id="year"
           placeholder={"Year"}
@@ -171,7 +197,9 @@ function CreateMotorbikeForm() {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isCreating}>Add motorbike</Button>
+        <Button disabled={isWorking}>
+          {isEditingSession ? "Update" : "Add motorbike"}
+        </Button>
       </FormRow>
     </Form>
   );

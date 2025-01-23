@@ -1,4 +1,4 @@
-import supabase, { supabaseBikeImagesBucketUrl } from "./supabase";
+import supabase, { supabaseBikeImagesBucketUrl, supabaseUrl } from "./supabase";
 
 export async function getMotorbikes() {
   const { data, error } = await supabase.from("motorbikes").select("*");
@@ -11,20 +11,31 @@ export async function getMotorbikes() {
   return data;
 }
 
-export async function createMotorbike(newBike) {
+export async function createOrEditMotorbike(newBike, id) {
+  const hasImagePath = newBike.image?.startsWith?.(supabaseUrl);
+
   // Unique image name and path
   const imageName = `${newBike.image.name}-${Math.random()}`.replaceAll(
     "/",
     ""
   );
 
-  const imagePath = `${supabaseBikeImagesBucketUrl}/${imageName}`;
+  const imagePath = hasImagePath
+    ? newBike.image
+    : `${supabaseBikeImagesBucketUrl}/${imageName}`;
 
-  // 1. Create new motorbike row in the motorbikes table
-  const { data, error } = await supabase
-    .from("motorbikes")
-    .insert([{ ...newBike, image: imagePath }])
-    .select();
+  // Create new motorbike row in the motorbikes table
+  let query = supabase.from("motorbikes");
+  if (!id) {
+    query = query.insert([{ ...newBike, image: imagePath }]);
+  }
+
+  // Edit motorbike data
+  if (id) {
+    query = query.update({ ...newBike, image: imagePath }).eq("id", id);
+  }
+
+  const { data, error } = await query.select().single();
 
   if (error) {
     console.error(error);

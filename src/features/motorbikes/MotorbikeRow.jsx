@@ -6,6 +6,8 @@ import { formatCurrency } from "../../utils/helpers.js";
 
 import Button from "../../ui/Button.jsx";
 import { deleteMotorbike } from "../../services/apiMotorbikes.js";
+import { useState } from "react";
+import CreateMotorbikeForm from "./CreateMotorbikeForm.jsx";
 
 const TableRow = styled.div`
   display: grid;
@@ -48,6 +50,8 @@ const Year = styled.div`
 `;
 
 function MotorbikeRow({ bike }) {
+  const [showForm, setShowForm] = useState(false);
+
   const queryClient = useQueryClient();
 
   const { id: bikeId, brand, model, image, price, year } = bike;
@@ -64,21 +68,34 @@ function MotorbikeRow({ bike }) {
   });
 
   return (
-    <TableRow role={"row"}>
-      <Img src={image} />
-      <BikeBrand>{brand}</BikeBrand>
-      <div>{model}</div>
-      <Price>{formatCurrency(price)}</Price>
-      <Year>{year}</Year>
-      <Button
-        variation={"danger"}
-        size={"small"}
-        onClick={() => mutate(bikeId)}
-        disabled={isDeleting}
-      >
-        Delete
-      </Button>
-    </TableRow>
+    <>
+      <TableRow role={"row"}>
+        <Img src={image} />
+        <BikeBrand>{brand}</BikeBrand>
+        <div>{model}</div>
+        <Price>{formatCurrency(price)}</Price>
+        <Year>{year}</Year>
+        <div>
+          <Button
+            variation={"secondary"}
+            size={"small"}
+            onClick={() => setShowForm((show) => !show)}
+            disabled={isDeleting}
+          >
+            Edit
+          </Button>
+          <Button
+            variation={"danger"}
+            size={"small"}
+            onClick={() => mutate(bikeId)}
+            disabled={isDeleting}
+          >
+            Delete
+          </Button>
+        </div>
+      </TableRow>
+      {showForm && <CreateMotorbikeForm bikeToEdit={bike} />}
+    </>
   );
 }
 
