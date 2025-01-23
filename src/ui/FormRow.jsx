@@ -38,7 +38,6 @@ const Error = styled.span`
 `;
 
 function FormRow({ label, error, children }) {
-  console.log(children.props);
   return (
     <StyledFormRow>
       <Label htmlFor={children.props?.id}>{label}</Label>
