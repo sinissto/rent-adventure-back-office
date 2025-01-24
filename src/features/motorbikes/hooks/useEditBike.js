@@ -10,7 +10,6 @@ export function useEditBike() {
     onSuccess: () => {
       toast.success("Motorbike successfully updated!");
       queryClient.invalidateQueries(["motorbikes"]);
-      reset();
     },
     onError: (err) => {
       toast.error(err.message);
