@@ -43,6 +43,8 @@ export async function createOrEditMotorbike(newBike, id) {
   }
 
   // 2. Upload image to supabase storage bucket
+  if (hasImagePath) return data;
+
   const { error: storageError } = await supabase.storage
     .from("bike-images")
     .upload(imageName, newBike.image);

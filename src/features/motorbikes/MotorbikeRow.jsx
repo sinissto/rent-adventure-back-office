@@ -5,6 +5,8 @@ import { useDeleteBike } from "./hooks/useDeleteBike.js";
 import { formatCurrency } from "../../utils/helpers.js";
 import Button from "../../ui/Button.jsx";
 import CreateMotorbikeForm from "./CreateMotorbikeForm.jsx";
+import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import { useCreateBike } from "./hooks/useCreateBike.js";
 
 const TableRow = styled.div`
   display: grid;
@@ -47,10 +49,40 @@ const Year = styled.div`
 `;
 
 function MotorbikeRow({ bike }) {
-  const { id: bikeId, brand, model, image, price, year } = bike;
+  const {
+    id: bikeId,
+    brand,
+    model,
+    price,
+    description,
+    image,
+    hp,
+    capacity,
+    weight,
+    seatHeight,
+    equipment,
+    year,
+  } = bike;
 
   const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteBike } = useDeleteBike();
+  const { isCreating, createBike } = useCreateBike();
+
+  function handleDuplicate() {
+    createBike({
+      model: `Copy of ${model}`,
+      brand,
+      price,
+      description,
+      image,
+      hp,
+      capacity,
+      weight,
+      seatHeight,
+      equipment,
+      year,
+    });
+  }
 
   return (
     <>
@@ -64,10 +96,18 @@ function MotorbikeRow({ bike }) {
           <Button
             variation={"secondary"}
             size={"small"}
+            onClick={handleDuplicate}
+            disabled={isDeleting}
+          >
+            <HiSquare2Stack />
+          </Button>
+          <Button
+            variation={"secondary"}
+            size={"small"}
             onClick={() => setShowForm((show) => !show)}
             disabled={isDeleting}
           >
-            Edit
+            <HiPencil />
           </Button>
           <Button
             variation={"danger"}
@@ -75,7 +115,7 @@ function MotorbikeRow({ bike }) {
             onClick={() => deleteBike(bikeId)}
             disabled={isDeleting}
           >
-            Delete
+            <HiTrash />
           </Button>
         </div>
       </TableRow>
