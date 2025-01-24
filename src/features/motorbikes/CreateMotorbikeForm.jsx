@@ -9,7 +9,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow.jsx";
 
-function CreateMotorbikeForm({ bikeToEdit = {} }) {
+function CreateMotorbikeForm({ bikeToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = bikeToEdit;
   const isEditingSession = Boolean(editId);
 
@@ -30,20 +30,29 @@ function CreateMotorbikeForm({ bikeToEdit = {} }) {
       editBike(
         { newBikeData: { ...data, image }, id: editId },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal();
+          },
         }
       );
     else
       createBike(
         { ...data, image: data.image[0] },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal();
+          },
         }
       );
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label={"Motorbike brand"} error={errors?.brand?.message}>
         <Input
           disabled={isWorking}
@@ -157,6 +166,7 @@ function CreateMotorbikeForm({ bikeToEdit = {} }) {
       <FormRow label={"Equipment"} error={errors?.equipment?.message}>
         <Textarea
           disabled={isWorking}
+          rows={"4"}
           type="text"
           id="equipment"
           defaultValue=""
@@ -181,7 +191,11 @@ function CreateMotorbikeForm({ bikeToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>
