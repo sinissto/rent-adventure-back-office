@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { useQuery } from "@tanstack/react-query";
-import { getMotorbikes } from "../../services/apiMotorbikes.js";
+import { useMotorbikes } from "./hooks/useMotorbikes.js";
+
 import Spinner from "../../ui/Spinner.jsx";
 import MotorbikeRow from "./MotorbikeRow.jsx";
 
@@ -29,14 +29,7 @@ const TableHeader = styled.header`
 `;
 
 function MotorbikesTable() {
-  const {
-    isLoading,
-    data: motorbikes,
-    error,
-  } = useQuery({
-    queryKey: ["motorbikes"],
-    queryFn: getMotorbikes,
-  });
+  const { motorbikes, isLoading } = useMotorbikes();
 
   if (isLoading) return <Spinner />;
 

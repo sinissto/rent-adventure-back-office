@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { useCreateBike } from "./hooks/useCreateBike.js";
+import { useEditBike } from "./hooks/useEditBike.js";
 
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
@@ -7,43 +8,18 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow.jsx";
-import { createOrEditMotorbike } from "../../services/apiMotorbikes.js";
-
-import { useForm } from "react-hook-form";
 
 function CreateMotorbikeForm({ bikeToEdit = {} }) {
   const { id: editId, ...editValues } = bikeToEdit;
   const isEditingSession = Boolean(editId);
 
-  const queryClient = useQueryClient();
+  const { isCreating, createBike } = useCreateBike();
+  const { isEditing, editBike } = useEditBike();
+
   const { register, handleSubmit, reset, formState } = useForm({
     defaultValues: isEditingSession ? editValues : {},
   });
   const { errors } = formState;
-
-  const { mutate: createBike, isLoading: isCreating } = useMutation({
-    mutationFn: createOrEditMotorbike,
-    onSuccess: () => {
-      toast.success("New motorbike successfully created!");
-      queryClient.invalidateQueries(["motorbikes"]);
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
-
-  const { mutate: editBike, isLoading: isEditing } = useMutation({
-    mutationFn: ({ newBikeData, id }) => createOrEditMotorbike(newBikeData, id),
-    onSuccess: () => {
-      toast.success("Motorbike successfully updated!");
-      queryClient.invalidateQueries(["motorbikes"]);
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
 
   const isWorking = isCreating || isEditing;
 
@@ -51,8 +27,19 @@ function CreateMotorbikeForm({ bikeToEdit = {} }) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
     if (isEditingSession)
-      editBike({ newBikeData: { ...data, image }, id: editId });
-    else createBike({ ...data, image: data.image[0] });
+      editBike(
+        { newBikeData: { ...data, image }, id: editId },
+        {
+          onSuccess: () => reset(),
+        }
+      );
+    else
+      createBike(
+        { ...data, image: data.image[0] },
+        {
+          onSuccess: () => reset(),
+        }
+      );
   }
 
   return (

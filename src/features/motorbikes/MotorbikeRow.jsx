@@ -1,12 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useState } from "react";
 import styled from "styled-components";
+import { useDeleteBike } from "./hooks/useDeleteBike.js";
 
 import { formatCurrency } from "../../utils/helpers.js";
-
 import Button from "../../ui/Button.jsx";
-import { deleteMotorbike } from "../../services/apiMotorbikes.js";
-import { useState } from "react";
 import CreateMotorbikeForm from "./CreateMotorbikeForm.jsx";
 
 const TableRow = styled.div`
@@ -50,22 +47,10 @@ const Year = styled.div`
 `;
 
 function MotorbikeRow({ bike }) {
-  const [showForm, setShowForm] = useState(false);
-
-  const queryClient = useQueryClient();
-
   const { id: bikeId, brand, model, image, price, year } = bike;
 
-  const { isPending: isDeleting, mutate } = useMutation({
-    mutationFn: deleteMotorbike,
-    onSuccess: () => {
-      toast.success("Motorbike successfully deleted!");
-      queryClient.invalidateQueries({ queryKey: ["motorbikes"] });
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const [showForm, setShowForm] = useState(false);
+  const { isDeleting, deleteBike } = useDeleteBike();
 
   return (
     <>
@@ -87,7 +72,7 @@ function MotorbikeRow({ bike }) {
           <Button
             variation={"danger"}
             size={"small"}
-            onClick={() => mutate(bikeId)}
+            onClick={() => deleteBike(bikeId)}
             disabled={isDeleting}
           >
             Delete
