@@ -4,14 +4,16 @@ import CreateMotorbikeForm from "./CreateMotorbikeForm.jsx";
 
 function AddMotorbike() {
   return (
-    <Modal>
-      <Modal.Open opens={"bike-form"}>
-        <Button>Add new motorbike</Button>
-      </Modal.Open>
-      <Modal.Window name={"bike-form"}>
-        <CreateMotorbikeForm />
-      </Modal.Window>
-    </Modal>
+    <div>
+      <Modal>
+        <Modal.Open opens={"bike-form"}>
+          <Button>Add new motorbike</Button>
+        </Modal.Open>
+        <Modal.Window name={"bike-form"}>
+          <CreateMotorbikeForm />
+        </Modal.Window>
+      </Modal>
+    </div>
   );
 }
 

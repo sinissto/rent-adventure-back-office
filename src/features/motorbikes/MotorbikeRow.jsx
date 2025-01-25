@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { useDeleteBike } from "./hooks/useDeleteBike.js";
 
@@ -7,6 +6,8 @@ import Button from "../../ui/Button.jsx";
 import CreateMotorbikeForm from "./CreateMotorbikeForm.jsx";
 import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { useCreateBike } from "./hooks/useCreateBike.js";
+import Modal from "../../ui/modal/Modal.jsx";
+import ConfirmDelete from "./ConfirmDelete.jsx";
 
 const TableRow = styled.div`
   display: grid;
@@ -64,7 +65,6 @@ function MotorbikeRow({ bike }) {
     year,
   } = bike;
 
-  const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteBike } = useDeleteBike();
   const { isCreating, createBike } = useCreateBike();
 
@@ -85,42 +85,56 @@ function MotorbikeRow({ bike }) {
   }
 
   return (
-    <>
-      <TableRow role={"row"}>
-        <Img src={image} />
-        <BikeBrand>{brand}</BikeBrand>
-        <div>{model}</div>
-        <Price>{formatCurrency(price)}</Price>
-        <Year>{year}</Year>
-        <div>
-          <Button
-            variation={"secondary"}
-            size={"small"}
-            onClick={handleDuplicate}
-            disabled={isDeleting}
-          >
-            <HiSquare2Stack />
-          </Button>
-          <Button
-            variation={"secondary"}
-            size={"small"}
-            onClick={() => setShowForm((show) => !show)}
-            disabled={isDeleting}
-          >
-            <HiPencil />
-          </Button>
-          <Button
-            variation={"danger"}
-            size={"small"}
-            onClick={() => deleteBike(bikeId)}
-            disabled={isDeleting}
-          >
-            <HiTrash />
-          </Button>
-        </div>
-      </TableRow>
-      {showForm && <CreateMotorbikeForm bikeToEdit={bike} />}
-    </>
+    <TableRow role={"row"}>
+      <Img src={image} />
+      <BikeBrand>{brand}</BikeBrand>
+      <div>{model}</div>
+      <Price>{formatCurrency(price)}</Price>
+      <Year>{year}</Year>
+      <div>
+        <Button
+          variation={"secondary"}
+          size={"small"}
+          onClick={handleDuplicate}
+          disabled={isDeleting}
+        >
+          <HiSquare2Stack />
+        </Button>
+
+        <Modal>
+          <Modal.Open opens={"edit-bike"}>
+            <Button
+              variation={"secondary"}
+              size={"small"}
+              disabled={isDeleting}
+            >
+              <HiPencil />
+            </Button>
+          </Modal.Open>
+          <Modal.Window name={"edit-bike"}>
+            <CreateMotorbikeForm bikeToEdit={bike} />
+          </Modal.Window>
+
+          <Modal.Open opens={"delete-bike"}>
+            <Button
+              variation={"danger"}
+              size={"small"}
+              // onClick={() => deleteBike(bikeId)}
+              disabled={isDeleting}
+            >
+              <HiTrash />
+            </Button>
+          </Modal.Open>
+          <Modal.Window name={"delete-bike"}>
+            <ConfirmDelete
+              resourceName={`${brand} ${model}`}
+              onConfirm={() => deleteBike(bikeId)}
+              disabled={isDeleting}
+            />
+          </Modal.Window>
+        </Modal>
+      </div>
+    </TableRow>
   );
 }
 
