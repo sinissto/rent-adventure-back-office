@@ -35,9 +35,10 @@ function MotorbikesTable() {
         <div>Year</div>
         <div></div>
       </Table.Header>
-      {motorbikes.map((bike) => (
-        <MotorbikeRow key={bike.id} bike={bike} />
-      ))}
+      <Table.Body
+        data={motorbikes}
+        render={(bike) => <MotorbikeRow key={bike.id} bike={bike} />}
+      />
     </Table>
   );
 }
