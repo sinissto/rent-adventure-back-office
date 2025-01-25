@@ -3,15 +3,7 @@ import { useMotorbikes } from "./hooks/useMotorbikes.js";
 
 import Spinner from "../../ui/Spinner.jsx";
 import MotorbikeRow from "./MotorbikeRow.jsx";
-
-const Table = styled.div`
-  border: 1px solid var(--color-grey-200);
-
-  font-size: 1.4rem;
-  background-color: var(--color-grey-0);
-  border-radius: 7px;
-  overflow: hidden;
-`;
+import Table from "../../ui/Table.jsx";
 
 const TableHeader = styled.header`
   display: grid;
@@ -34,15 +26,15 @@ function MotorbikesTable() {
   if (isLoading) return <Spinner />;
 
   return (
-    <Table role={"table"}>
-      <TableHeader role={"row"}>
+    <Table columns={"0.6fr 1.8fr 2.2fr 1fr 1fr 1fr"}>
+      <Table.Header>
         <div></div>
         <div>Brand</div>
         <div>Model</div>
         <div>Price</div>
         <div>Year</div>
         <div></div>
-      </TableHeader>
+      </Table.Header>
       {motorbikes.map((bike) => (
         <MotorbikeRow key={bike.id} bike={bike} />
       ))}

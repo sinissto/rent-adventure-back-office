@@ -8,19 +8,7 @@ import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { useCreateBike } from "./hooks/useCreateBike.js";
 import Modal from "../../ui/modal/Modal.jsx";
 import ConfirmDelete from "./ConfirmDelete.jsx";
-
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
-  min-height: 10rem;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-300);
-  }
-`;
+import Table from "../../ui/Table.jsx";
 
 const Img = styled.img`
   display: block;
@@ -85,7 +73,7 @@ function MotorbikeRow({ bike }) {
   }
 
   return (
-    <TableRow role={"row"}>
+    <Table.Row>
       <Img src={image} />
       <BikeBrand>{brand}</BikeBrand>
       <div>{model}</div>
@@ -134,7 +122,7 @@ function MotorbikeRow({ bike }) {
           </Modal.Window>
         </Modal>
       </div>
-    </TableRow>
+    </Table.Row>
   );
 }
 
