@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { useMotorbikes } from "./hooks/useMotorbikes.js";
 
-import Spinner from "../../ui/Spinner.jsx";
+import Spinner from "../../ui/loading/Spinner.jsx";
 import MotorbikeRow from "./MotorbikeRow.jsx";
-import Table from "../../ui/Table.jsx";
+import Table from "../../ui/table/Table.jsx";
+import Menus from "../../ui/table/Menus.jsx";
 
 const TableHeader = styled.header`
   display: grid;
@@ -26,20 +27,22 @@ function MotorbikesTable() {
   if (isLoading) return <Spinner />;
 
   return (
-    <Table columns={"0.6fr 1.8fr 2.2fr 1fr 1fr 1fr"}>
-      <Table.Header>
-        <div></div>
-        <div>Brand</div>
-        <div>Model</div>
-        <div>Price</div>
-        <div>Year</div>
-        <div></div>
-      </Table.Header>
-      <Table.Body
-        data={motorbikes}
-        render={(bike) => <MotorbikeRow key={bike.id} bike={bike} />}
-      />
-    </Table>
+    <Menus>
+      <Table columns={"0.6fr 1.8fr 2.2fr 1fr 1fr 1fr"}>
+        <Table.Header>
+          <div></div>
+          <div>Brand</div>
+          <div>Model</div>
+          <div>Price</div>
+          <div>Year</div>
+          <div></div>
+        </Table.Header>
+        <Table.Body
+          data={motorbikes}
+          render={(bike) => <MotorbikeRow key={bike.id} bike={bike} />}
+        />
+      </Table>
+    </Menus>
   );
 }
 

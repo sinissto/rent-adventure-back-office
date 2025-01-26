@@ -8,7 +8,8 @@ import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { useCreateBike } from "./hooks/useCreateBike.js";
 import Modal from "../../ui/modal/Modal.jsx";
 import ConfirmDelete from "./ConfirmDelete.jsx";
-import Table from "../../ui/Table.jsx";
+import Table from "../../ui/table/Table.jsx";
+import Menus from "../../ui/table/Menus.jsx";
 
 const Img = styled.img`
   display: block;
@@ -80,46 +81,45 @@ function MotorbikeRow({ bike }) {
       <Price>{formatCurrency(price)}</Price>
       <Year>{year}</Year>
       <div>
-        <Button
-          variation={"secondary"}
-          size={"small"}
-          onClick={handleDuplicate}
-          disabled={isDeleting}
-        >
-          <HiSquare2Stack />
-        </Button>
+        {/*<Button*/}
+        {/*  variation={"secondary"}*/}
+        {/*  size={"small"}*/}
+        {/*  onClick={handleDuplicate}*/}
+        {/*  disabled={isDeleting}*/}
+        {/*>*/}
+        {/*  <HiSquare2Stack />*/}
+        {/*</Button>*/}
 
         <Modal>
-          <Modal.Open opens={"edit-bike"}>
-            <Button
-              variation={"secondary"}
-              size={"small"}
-              disabled={isDeleting}
-            >
-              <HiPencil />
-            </Button>
-          </Modal.Open>
-          <Modal.Window name={"edit-bike"}>
-            <CreateMotorbikeForm bikeToEdit={bike} />
-          </Modal.Window>
+          <Menus.Menu>
+            <Menus.Toggle id={bikeId} />
 
-          <Modal.Open opens={"delete-bike"}>
-            <Button
-              variation={"danger"}
-              size={"small"}
-              // onClick={() => deleteBike(bikeId)}
-              disabled={isDeleting}
-            >
-              <HiTrash />
-            </Button>
-          </Modal.Open>
-          <Modal.Window name={"delete-bike"}>
-            <ConfirmDelete
-              resourceName={`${brand} ${model}`}
-              onConfirm={() => deleteBike(bikeId)}
-              disabled={isDeleting}
-            />
-          </Modal.Window>
+            <Menus.List id={bikeId}>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
+                Duplicate
+              </Menus.Button>
+
+              <Modal.Open opens={"edit-bike"}>
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Modal.Open>
+
+              <Modal.Open opens={"delete-bike"}>
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+
+            <Modal.Window name={"edit-bike"}>
+              <CreateMotorbikeForm bikeToEdit={bike} />
+            </Modal.Window>
+
+            <Modal.Window name={"delete-bike"}>
+              <ConfirmDelete
+                resourceName={`${brand} ${model}`}
+                onConfirm={() => deleteBike(bikeId)}
+                disabled={isDeleting}
+              />
+            </Modal.Window>
+          </Menus.Menu>
         </Modal>
       </div>
     </Table.Row>

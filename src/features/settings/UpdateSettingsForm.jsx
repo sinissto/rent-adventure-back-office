@@ -1,9 +1,9 @@
-import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
-import Input from "../../ui/Input";
+import Form from "../../ui/form/Form.jsx";
+import FormRow from "../../ui/form/FormRow.jsx";
+import Input from "../../ui/form/Input.jsx";
 import Button from "../../ui/Button.jsx";
 import { useSettings } from "./hooks/useSettings.js";
-import Spinner from "../../ui/Spinner.jsx";
+import Spinner from "../../ui/loading/Spinner.jsx";
 import { useUpdateSettings } from "./hooks/useUpdateSettings.js";
 import { useForm } from "react-hook-form";
 

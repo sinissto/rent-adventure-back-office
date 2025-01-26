@@ -2,12 +2,12 @@ import { useForm } from "react-hook-form";
 import { useCreateBike } from "./hooks/useCreateBike.js";
 import { useEditBike } from "./hooks/useEditBike.js";
 
-import Input from "../../ui/Input";
-import Form from "../../ui/Form";
+import Input from "../../ui/form/Input.jsx";
+import Form from "../../ui/form/Form.jsx";
 import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
-import Textarea from "../../ui/Textarea";
-import FormRow from "../../ui/FormRow.jsx";
+import FileInput from "../../ui/form/FileInput.jsx";
+import Textarea from "../../ui/form/Textarea.jsx";
+import FormRow from "../../ui/form/FormRow.jsx";
 
 function CreateMotorbikeForm({ bikeToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = bikeToEdit;
