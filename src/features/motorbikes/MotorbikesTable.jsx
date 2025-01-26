@@ -1,30 +1,27 @@
-import styled from "styled-components";
 import { useMotorbikes } from "./hooks/useMotorbikes.js";
 
 import Spinner from "../../ui/loading/Spinner.jsx";
 import MotorbikeRow from "./MotorbikeRow.jsx";
 import Table from "../../ui/table/Table.jsx";
 import Menus from "../../ui/table/Menus.jsx";
-
-const TableHeader = styled.header`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-
-  background-color: var(--color-grey-50);
-  border-bottom: 1px solid var(--color-grey-100);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  font-weight: 600;
-  color: var(--color-grey-600);
-  padding: 1.6rem 2.4rem;
-`;
+import { useSearchParams } from "react-router";
 
 function MotorbikesTable() {
   const { motorbikes, isLoading } = useMotorbikes();
+  const [searchParams] = useSearchParams();
 
   if (isLoading) return <Spinner />;
+
+  const filterValue = searchParams.get("brand") || "all";
+
+  let filteredBikes;
+  if (filterValue === "all") {
+    filteredBikes = motorbikes;
+  } else {
+    filteredBikes = motorbikes.filter(
+      (bike) => bike.brand.toLowerCase() === filterValue
+    );
+  }
 
   return (
     <Menus>
@@ -38,7 +35,7 @@ function MotorbikesTable() {
           <div></div>
         </Table.Header>
         <Table.Body
-          data={motorbikes}
+          data={filteredBikes}
           render={(bike) => <MotorbikeRow key={bike.id} bike={bike} />}
         />
       </Table>
