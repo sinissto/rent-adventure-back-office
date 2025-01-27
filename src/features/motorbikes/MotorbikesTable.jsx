@@ -12,6 +12,7 @@ function MotorbikesTable() {
 
   if (isLoading) return <Spinner />;
 
+  // Filtering by brand
   const filterValue = searchParams.get("brand") || "all";
 
   let filteredBikes;
@@ -22,6 +23,14 @@ function MotorbikesTable() {
       (bike) => bike.brand.toLowerCase() === filterValue
     );
   }
+
+  // Sorting
+  const sortBy = searchParams.get("sortBy") || "startDate-asc";
+  const [field, direction] = sortBy.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+  const sortedBikes = filteredBikes.sort(
+    (a, b) => (a[field] - b[field]) * modifier
+  );
 
   return (
     <Menus>
@@ -35,7 +44,7 @@ function MotorbikesTable() {
           <div></div>
         </Table.Header>
         <Table.Body
-          data={filteredBikes}
+          data={sortedBikes}
           render={(bike) => <MotorbikeRow key={bike.id} bike={bike} />}
         />
       </Table>
