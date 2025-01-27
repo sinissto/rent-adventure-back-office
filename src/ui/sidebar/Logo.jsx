@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { NavLink } from "react-router";
 
 const StyledLogo = styled.div`
   text-align: center;
@@ -11,9 +12,11 @@ const Img = styled.img`
 
 function Logo() {
   return (
-    <StyledLogo>
-      <Img src={"/logo.png"} alt={"Logo"} />
-    </StyledLogo>
+    <NavLink to={"/"}>
+      <StyledLogo>
+        <Img src={"/logo.png"} alt={"Logo"} />
+      </StyledLogo>
+    </NavLink>
   );
 }
 
