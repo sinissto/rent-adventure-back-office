@@ -5,12 +5,14 @@ import MotorbikeRow from "./MotorbikeRow.jsx";
 import Table from "../../ui/table/Table.jsx";
 import Menus from "../../ui/table/Menus.jsx";
 import { useSearchParams } from "react-router";
+import Empty from "../../ui/Empty.jsx";
 
 function MotorbikesTable() {
   const { motorbikes, isLoading } = useMotorbikes();
   const [searchParams] = useSearchParams();
 
   if (isLoading) return <Spinner />;
+  if (!motorbikes.length) return <Empty resourceName={"motorbikes"} />;
 
   // Filtering by brand
   const filterValue = searchParams.get("brand") || "all";
