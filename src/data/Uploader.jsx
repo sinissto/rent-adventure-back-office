@@ -149,7 +149,7 @@ function Uploader() {
         Upload ALL
       </Button>
 
-      <Button onClick={uploadBookings} isLoading={isLoading}>
+      <Button onClick={uploadBookings} disabled={isLoading}>
         Upload bookings ONLY
       </Button>
     </div>

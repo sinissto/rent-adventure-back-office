@@ -55,9 +55,9 @@ function Filter({ filterField, options, isLoading }) {
         <FilterButton
           key={index}
           onClick={() => handleClick(option.toLowerCase())}
-          active={option.toLowerCase() === filterValue}
+          active={option.toLowerCase() === filterValue ? "active" : ""}
         >
-          {option}
+          {option.toUpperCase()}
         </FilterButton>
       ))}
     </StyledFilter>
