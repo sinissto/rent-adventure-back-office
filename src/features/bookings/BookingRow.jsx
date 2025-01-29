@@ -11,6 +11,7 @@ import {
   HiEye,
 } from "react-icons/hi2";
 import { useNavigate } from "react-router";
+import { useCheckout } from "../check-in-out/hooks/useCheckout.js";
 
 const Bike = styled.div`
   font-size: 1.6rem;
@@ -55,6 +56,7 @@ function BookingRow({
   },
 }) {
   const navigate = useNavigate();
+  const { checkout, isCheckingOut } = useCheckout();
 
   const statusToTagName = {
     unconfirmed: "blue",
@@ -110,7 +112,11 @@ function BookingRow({
           )}
 
           {status === "checked-in" && (
-            <Menus.Button icon={<HiArrowUpOnSquare />} onClick={() => {}}>
+            <Menus.Button
+              icon={<HiArrowUpOnSquare />}
+              onClick={() => checkout(bookingId)}
+              disabled={isCheckingOut}
+            >
               Check out
             </Menus.Button>
           )}

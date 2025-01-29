@@ -11,7 +11,7 @@ import useBooking from "../bookings/hooks/useBooking.js";
 import Spinner from "../../ui/loading/Spinner.jsx";
 import Checkbox from "../../ui/Checkbox.jsx";
 import { formatCurrency } from "../../utils/helpers.js";
-import { useCheckinI } from "./hooks/useCheckin.js";
+import { useCheckin } from "./hooks/useCheckin.js";
 
 const Box = styled.div`
   /* Box */
@@ -28,7 +28,7 @@ function CheckinBooking() {
   const { booking, isLoading } = useBooking();
   useEffect(() => setConfirmPaid(booking?.isPaid ?? false), [booking]);
 
-  const { checkin, isCheckingIn } = useCheckinI();
+  const { checkin, isCheckingIn } = useCheckin();
 
   if (isLoading) return <Spinner />;
   const { id: bookingId, riders, rentPrice } = booking;
