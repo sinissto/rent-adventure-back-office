@@ -52,7 +52,7 @@ function BookingDetail() {
         {status === "unconfirmed" && (
           <Button
             icon={<HiArrowDownOnSquare />}
-            onClick={() => navigate("/checkin")}
+            onClick={() => navigate(`/checkin/${bookingId}`)}
           >
             Check in
           </Button>
