@@ -1,5 +1,6 @@
 import supabase from "./supabase.js";
 import { PAGE_SIZE } from "../utils/constants.js";
+import { useMutation } from "@tanstack/react-query";
 
 export async function getBookings({ filter, sortBy, page }) {
   let query = supabase
@@ -59,5 +60,16 @@ export async function updateBooking(id, obj) {
     console.error(error);
     throw new Error("Booking could not be updated");
   }
+  return data;
+}
+
+export async function deleteBooking(id) {
+  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+
+  if (error) {
+    console.log(error);
+    throw new Error("Booking could not be deleted!");
+  }
+
   return data;
 }
