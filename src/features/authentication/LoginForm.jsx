@@ -9,7 +9,7 @@ import SpinnerMini from "../../ui/loading/SpinnerMini.jsx";
 
 function LoginForm() {
   const [email, setEmail] = useState("demo@user.com");
-  const [password, setPassword] = useState("pass123");
+  const [password, setPassword] = useState("Pass123@");
   const { login, isLoading } = useLogin();
 
   function handleSubmit(e) {
@@ -17,7 +17,15 @@ function LoginForm() {
     if (!email || !password) return;
 
     //todo login fn below from react query
-    login({ email, password });
+    login(
+      { email, password },
+      {
+        onSettled: () => {
+          setEmail("");
+          setPassword("");
+        },
+      }
+    );
   }
 
   if (isLoading) return <Spinner />;
