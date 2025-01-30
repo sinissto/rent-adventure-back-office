@@ -9,7 +9,6 @@ export function useUser() {
   } = useQuery({
     queryKey: ["user"],
     queryFn: getCurrentUser,
-    gcTime: 0,
   });
 
   if (error) {
