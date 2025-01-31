@@ -76,7 +76,7 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
     throw new Error(error.message);
   }
 
-  const fileName = `avatar-${data.user.id}-${Math.random()}`;
+  const fileName = `avatar-${data.user.id}-${Math.random()}.jpg`;
 
   const { error: storageError } = await supabase.storage
     .from("avatars")
