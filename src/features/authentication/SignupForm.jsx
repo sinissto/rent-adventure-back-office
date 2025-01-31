@@ -38,7 +38,7 @@ function SignupForm() {
             required: "This field is required!",
             pattern: {
               value: /\S+@\S+\.\S+/,
-              message: "Please enter valid email addres",
+              message: "Please enter valid email address",
             },
           })}
           disabled={isSigningUp}

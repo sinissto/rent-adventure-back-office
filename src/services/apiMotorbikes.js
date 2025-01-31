@@ -1,4 +1,4 @@
-import supabase, { supabaseBikeImagesBucketUrl, supabaseUrl } from "./supabase";
+import supabase, { supabaseBucketsUrl, supabaseUrl } from "./supabase";
 
 export async function getMotorbikes() {
   const { data, error } = await supabase.from("motorbikes").select("*");
@@ -22,7 +22,7 @@ export async function createOrEditMotorbike(newBike, id) {
 
   const imagePath = hasImagePath
     ? newBike.image
-    : `${supabaseBikeImagesBucketUrl}/${imageName}`;
+    : `${supabaseBucketsUrl}/bike-images/${imageName}`;
 
   // Create new motorbike row in the motorbikes table
   let query = supabase.from("motorbikes");

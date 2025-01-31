@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const supabaseBikeImagesBucketUrl =
-  "https://hwomlhbltvjvyjobrsns.supabase.co/storage/v1/object/public/bike-images";
+export const supabaseBucketsUrl =
+  "https://hwomlhbltvjvyjobrsns.supabase.co/storage/v1/object/public";
 
 export const supabaseUrl = "https://hwomlhbltvjvyjobrsns.supabase.co";
 const supabaseKey =
