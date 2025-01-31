@@ -145,7 +145,6 @@ function DurationChart({ confirmedRent }) {
   const { isDarkMode } = useDarkMode();
   const startData = isDarkMode ? startDataDark : startDataLight;
   const data = prepareData(startData, confirmedRent);
-  console.log(data);
 
   return (
     <ChartBox>
