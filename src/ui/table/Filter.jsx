@@ -39,7 +39,7 @@ const FilterButton = styled.button`
 
 function Filter({ filterField, options, isLoading }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(options);
+
   const filterValue =
     searchParams.get(filterField) || options.at(0).toLowerCase();
 
