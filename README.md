@@ -74,7 +74,7 @@ Follow the steps below to set up and run the application locally:
 ```
 
 ## Live presentation
-Visit [https://rent-adventure.vercel.app] to see deployed app
+Visit [https://rent-adventure-back-office.vercel.app] to browse deployed app
 
 ## License
 
